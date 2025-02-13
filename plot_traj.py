@@ -11,13 +11,13 @@ from math import pi, sin, cos
 # Extract data
 data_dir = os.path.join(sys.path[0], "data")
 ### START CODING HERE ### ~ 1 line
-data_file = os.path.join(data_dir, "vel_data_gnd.csv")  # use appropriate data
+data_file = os.path.join(data_dir, "vel_data_no_load.csv")  # use your own data
 ### END CODING HERE ###
 with open(data_file, newline="") as f:
     reader = csv.reader(f)
-    vel_data_gnd = tuple(reader)
+    vel_data_no_load = tuple(reader)
 real_vels = []
-for vd in vel_data_gnd:
+for vd in vel_data_no_load:
     real_vels.append((float(vd[0]), float(vd[1])))
 # Create target velocities
 ref_vels = (
@@ -47,14 +47,16 @@ dt = 0.05  # seconds
 
 for i in range(len(targ_vels)):
     ### START CODING HERE ### ~ 6 lines
+    
     # Compute ideal trajectory
-    dx = targ_vels[i][0] * cos(targ_vels[i][1]) * dt
-    dy = targ_vels[i][0] * sin(targ_vels[i][1]) * dt
+
+    dx = targ_vels[i][0] * cos(th[-1]) * dt
+    dy = targ_vels[i][0] * sin(th[-1]) * dt
     dth = targ_vels[i][1] * dt
 
     # Compute actual trajectory
-    dx_hat = real_vels[i][0] * cos(real_vels[i][1]) * dt
-    dy_hat = real_vels[i][0] * sin(real_vels[i][1]) * dt
+    dx_hat = real_vels[i][0] * cos(th_hat[-1]) * dt
+    dy_hat = real_vels[i][0] * sin(th_hat[-1]) * dt
     dth_hat = real_vels[i][1] * dt
     ### END CODING HERE ###
 
@@ -94,8 +96,8 @@ ax[1].grid()
 ax[1].legend(["target", "actual"])
 # Title
 ### CHOOSE APPROPRIATE TITLE ###
+fig.suptitle("Trajectory Compare - No Load", fontsize=16)
+plt.savefig("noload_traj.png")
 # fig.suptitle("Trajectory Compare - Ground", fontsize=16)
-# plt.savefig("noload_traj.png")
-fig.suptitle("Trajectory Compare - Ground", fontsize=16)
-plt.savefig("ground_traj.png")
+# plt.savefig("ground_traj.png")
 plt.show()
